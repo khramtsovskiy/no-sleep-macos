@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# no-sleep — управление сном при закрытой крышке на macOS
+# https://github.com/khramtsovskiy/no-sleep-macos
+#
+# Использование: no-sleep {up|down|status}
+#
+# Лицензия: MIT
+#
+
+set -e
+
+usage() {
+  echo "Использование: no-sleep {up|down|status}"
+  echo "  up      — запретить сон при закрытой крышке (disablesleep 1)"
+  echo "  down    — вернуть обычный сон (disablesleep 0)"
+  echo "  status  — показать текущее состояние"
+  exit 1
+}
+
+get_state() {
+  local val
+  val=$(pmset -g | grep -i sleepdisabled | awk '{print $NF}' | tr -d '[:space:]')
+  if [ -z "$val" ]; then
+    echo "0"
+  else
+    echo "$val"
+  fi
+}
+
+case "$1" in
+  up)
+    sudo /usr/bin/pmset -a disablesleep 1
+    sleep 0.3
+    state=$(get_state)
+    if [ "$state" = "1" ]; then
+      echo "🔒 SleepDisabled = 1 — сон при закрытой крышке ОТКЛЮЧЁН"
+    else
+      echo "⚠️  SleepDisabled = $state — не удалось применить (проверь sudo)"
+    fi
+    ;;
+  down)
+    sudo /usr/bin/pmset -a disablesleep 0
+    sleep 0.3
+    state=$(get_state)
+    if [ "$state" = "0" ]; then
+      echo "💤 SleepDisabled = 0 — сон при закрытой крышке включён"
+    else
+      echo "⚠️  SleepDisabled = $state — не удалось применить (проверь sudo)"
+    fi
+    ;;
+  status)
+    state=$(get_state)
+    if [ "$state" = "1" ]; then
+      echo "🔒 SleepDisabled = 1 — Mac НЕ спит при закрытой крышке"
+    else
+      echo "💤 SleepDisabled = 0 — Mac спит при закрытой крышке (норма)"
+    fi
+    ;;
+  *)
+    usage
+    ;;
+esac
