@@ -25,6 +25,13 @@ no-sleep status   # посмотреть текущее состояние
 
 ## Установка
 
+### Через Homebrew (рекомендуется)
+
+```bash
+brew install khramtsovskiy/tap/no-sleep
+```
+
+### Вручную
 ### 1. Скопируй скрипт
 
 ```bash
@@ -120,6 +127,14 @@ sudo pmset -a disablesleep 0   # разрешить сон
 
 ## Uninstall
 
+### Если устанавливал через Homebrew
+
+```bash
+brew uninstall no-sleep
+brew untap khramtsovskiy/tap
+```
+
+### Если устанавливал вручную
 Удалить скрипт:
 
 ```bash
