@@ -118,6 +118,21 @@ sudo pmset -a disablesleep 0   # разрешить сон
 
 Состояние читается из вывода `pmset -g` — там параметр называется `SleepDisabled` (не `disablesleep`, как в команде установки — это частая путаница).
 
+## Uninstall
+
+Удалить скрипт:
+
+```bash
+rm ~/bin/no-sleep
+```
+
+И правило sudoers, если ты его создавал:
+
+```bash
+sudo rm /etc/sudoers.d/pmset
+```
+
+
 ## Совместимость
 
 | Платформа | Статус |
